@@ -229,3 +229,10 @@ a:hover {
 	cursor: pointer;
 }
 
+/*Page Login*/
+
+.login {
+    font-weight: 600;
+    cursor: default;
+}
+
