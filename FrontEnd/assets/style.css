@@ -188,7 +188,9 @@ footer nav ul {
 	margin: 2em
 }
 
-/*nouvelles entrées*/ 
+/* -------------------------- NOUVELLES ENTREES------------------------------*/
+
+/* Filtres catégories*/ 
 
 #filtres {
 	display: flex;
@@ -236,3 +238,47 @@ a:hover {
     cursor: default;
 }
 
+
+
+.formulaire-login {
+	text-align: center;
+	margin-left: 50%;
+	width: 379px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 92px;
+}
+
+
+#login a {
+	text-align: center;
+
+}
+
+#login form {
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+}
+
+#login input {
+	height: 36px;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#login label {
+	margin: 2em 0 1em 0;
+}
+
+
+#bouton_login {
+	color: white;
+	background-color: #1D6154;
+	width: 179px;
+	border-radius: 60px ;
+	
+}
+
+
+/* bla bla bla */
