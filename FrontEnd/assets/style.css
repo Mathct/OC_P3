@@ -269,7 +269,8 @@ a:hover {
 }
 
 #login label {
-	margin: 2em 0 1em 0;
+	margin-bottom: 1em;
+	margin-top: 1em;
 }
 
 
@@ -285,5 +286,19 @@ a:hover {
 	cursor: pointer;
 }
 
+#message-error {
+	color: red;
+	margin-top: 10px;
+	visibility: hidden;
+	height: 20px;
+}
 
-/* bla bla bla */
+
+#login_logout {
+	cursor: pointer;
+}
+
+#login_logout:hover {
+	color: #B1663C;
+}
+

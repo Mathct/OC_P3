@@ -1,11 +1,37 @@
+// Test connexion et déconnexion //
+
+const textlog = document.getElementById("login_logout");
+let token = window.localStorage.getItem('TokenAuth');
+    if (token != null)
+    {
+        
+        textlog.textContent = "logout";
+    }
+
+textlog.addEventListener ("click", function () {
+
+    if (token == null)
+    {
+        window.location.href = 'login.html';
+        
+    }
+
+    else
+    {
+        window.localStorage.removeItem("TokenAuth");
+        window.location.href = 'index.html';
+    }   
+
+});
+
+
+
 //recuperation et stockage des données works sur l'api
 const reponse = await fetch('http://localhost:5678/api/works');
 const works = await reponse.json();
 //recuperation et stockage des données categories sur l'api
 const reponse2 = await fetch('http://localhost:5678/api/categories');
 const category = await reponse2.json();
-
-
 
 
 //fonction pour afficher la liste complete des works
@@ -38,19 +64,6 @@ afficherWorks(works);
 
 
 
-
-
-
-//creation dynamique des filtres à partir des categories existantes sur l'API 
-
-/*
-let tableau = [];
-// Parcours de la liste des travaux "works" et creation d'un tableau avec les objets "category" de chaque "work"
-for (let i = 0; i < category.length; i++) {
-    const Element = category[i];
-    tableau.push(Element);
-}*/
-
 // Extraction des noms uniques des catégories 
 const uniqueNamesSet = new Set(category.map(item => item.name));
 // Transformation en tableau pour faire le sort et avoir un resultat en tableau
@@ -71,11 +84,12 @@ if (listeNames.length != 0)
 
 
 
-// on supprime les boutons
+// Gestion des bouton filtres
+
 const group = document.getElementById("filtres");
 group.innerHTML = "";
 
-// creation des boutons
+    // creation des boutons
 for (let i=0; i<listeNames.length; i++)
     {
         const bouton = document.createElement("div");
@@ -90,8 +104,8 @@ for (let i=0; i<listeNames.length; i++)
             }
     }
 
-// Creation des EventListener
-// on recupere tous les boutons avec la classe filtre
+    // Creation des EventListener
+    // on recupere tous les boutons avec la classe filtre et on applique les modifications de styles
 const buttons = document.querySelectorAll('.filtre');
 
 for (let i = 0; i < buttons.length; i++) {
