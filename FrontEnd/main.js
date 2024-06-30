@@ -83,7 +83,6 @@ afficherWorks(works);
 
 
 
-
 // Gestion des bouton filtres
 
     // Extraction des noms uniques des catégories 
@@ -214,7 +213,7 @@ function afficherWorksModal(works){
         imageWorkModal.src = work.imageUrl;
         imageWorkModal.alt = work.title;
         
-        // On rattache le workElement (figures) au groupWork (gallery)
+        // On rattache le workElement (figures) au groupWork (modal-gallery)
         groupWorkModal.appendChild(workElementModal);
         // On rattache les deux elements (img et title) au workElement (figures) 
         workElementModal.appendChild(imageWorkModal);
