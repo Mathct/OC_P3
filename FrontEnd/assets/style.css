@@ -28,6 +28,11 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+html {
+	background: #FFFEF8;
+}
+
 body {
 	line-height: 1;
 }
@@ -95,11 +100,6 @@ nav li {
 	font-size: 1.2em;
 }
 
-/*li:hover {
-	color: #B1663C;
-	cursor: pointer;
-}*/
-
 #introduction {
 	display: flex;
 	align-items: center;
@@ -123,25 +123,30 @@ nav li {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
 	text-align: center;
-	/*margin-bottom: 1em;*/
 }
+
 .gallery {
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
+	margin-top: 50px;
 }
 
 .gallery img {
 	width: 100%;
+	height: 95%;
+	margin-bottom: 10px;
+	object-fit: cover;
 
 }
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -192,21 +197,48 @@ footer nav ul {
 
 /* Filtres catégories*/ 
 
+#edition-mode{
+	background-color : black;
+	width:100%;
+	height: 59px;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+	color: white;
+	font-size: 16px;
+	font-weight: 400;
+	
+
+}
+
+.editor span{
+	background-color : black;
+	font-size: 16px;
+}
+
+
 #filtres {
 	display: flex;
+	width: 100%;
 	justify-content: center;
-	gap: 20px;
-	margin-top: 1em;
-	margin-bottom: 1em;
+	gap: 10px;
 }
 
 .filtre {
-	cursor: pointer;
-	border: solid 1px #1D6154;
-	color: #1D6154;
+	padding: 10px 20px;
 	border-radius: 60px;
-	padding: 5px 10px;
-	font-weight: bold;
+	border: solid 1px #1D6154;
+	background: none;
+	color: #1D6154;
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 16px;
+	text-align: center;
+	margin: 0;
+	width: auto;
+	cursor: pointer;
+	box-sizing: border-box;
 }
 
 .filtre:hover {
@@ -231,7 +263,7 @@ a:hover {
 	cursor: pointer;
 }
 
-/*Page Login*/
+/*gestion Login/Logout + boutoun modifer*/
 
 .login {
     font-weight: 600;
@@ -271,6 +303,8 @@ a:hover {
 #login label {
 	margin-bottom: 1em;
 	margin-top: 1em;
+	font-size: 14px;
+	font-weight: 500;
 }
 
 
@@ -302,3 +336,116 @@ a:hover {
 	color: #B1663C;
 }
 
+.mesprojets{
+	display:flex;
+	justify-content:center;
+	align-items: center;
+	gap: 30px;
+	margin-bottom: 50px;
+}
+
+#bouton-modifier span {
+	margin-left: 10px;
+}
+
+
+/* modal */
+
+.modal {
+    position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+	
+}
+
+.hidden {
+    display: none !important;
+}
+
+.modal-content {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	background-color: white;
+    padding: 20px;
+    width: 630px;
+    height: 688px;
+    border-radius: 10px;
+	box-sizing: border-box;
+	
+	
+}
+
+.cadre {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	height: 100%;
+	width: 420px;
+	
+}
+
+.close-button {
+	position: absolute;
+	font-size: 24px;
+	right: 20px;
+	cursor: pointer;
+	
+}
+
+.modal-content h2 {
+	font-size: 26px;
+	font-weight: 400;
+	line-height: 30.5px;
+	color: black;
+	margin-top: 40px;
+
+}
+
+.separateur {
+    border-top: 1px solid #B3B3B3;
+	width: 100%;
+}
+
+
+#butt_ajouter_photo {
+
+	color: white;
+	background-color: #1D6154;
+	width: 237px;
+	height: 36px;
+	border-radius: 60px ;
+	font-size: 14px;
+	font-weight: 700;
+	margin-bottom: 20px;
+	border: none;
+	cursor: pointer;
+	
+	
+}
+
+.modal-gallery {
+
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-column-gap: 10px;
+	grid-row-gap: 20px;
+	
+
+}
+
+.modal-gallery img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+
+}

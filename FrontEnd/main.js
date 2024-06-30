@@ -1,28 +1,45 @@
-// Test connexion et déconnexion //
+//Déclaration des variables au chargement de la page
 
 const textlog = document.getElementById("login_logout");
+const modifier = document.getElementById("bouton-modifier");
+const groupefiltre = document.getElementById("filtres");
+const editionmode = document.getElementById("edition-mode");
+
 let token = window.localStorage.getItem('TokenAuth');
-    if (token != null)
-    {
-        
-        textlog.textContent = "logout";
-    }
 
-textlog.addEventListener ("click", function () {
+// declaration des deux fonction login et logout - Afin de ne pas avoir besoin de recharger la page après un logout
 
-    if (token == null)
-    {
-        window.location.href = 'login.html';
-        
-    }
+function Login ()
+{
+    window.location.href = 'login.html';
+}
 
-    else
-    {
-        window.localStorage.removeItem("TokenAuth");
-        window.location.href = 'index.html';
-    }   
+function Logout ()
+{
+    window.localStorage.removeItem("TokenAuth");
+    textlog.textContent = "login";
+    modifier.classList.add('hidden');
+    groupefiltre.classList.remove('hidden');
+    editionmode.classList.add('hidden');
+    textlog.addEventListener('click', Login)
+}
 
-});
+// Init lors du chargement de la page en fonction de l'etat du TokenAuth
+
+if (token != null)
+{
+    textlog.textContent = "logout";
+    modifier.classList.remove('hidden');
+    groupefiltre.classList.add('hidden');
+    editionmode.classList.remove('hidden');
+    textlog.addEventListener('click', Logout)
+}
+
+else
+{
+    textlog.addEventListener('click', Login)
+}
+
 
 
 
@@ -64,16 +81,21 @@ afficherWorks(works);
 
 
 
-// Extraction des noms uniques des catégories 
+
+
+
+// Gestion des bouton filtres
+
+    // Extraction des noms uniques des catégories 
 const uniqueNamesSet = new Set(category.map(item => item.name));
-// Transformation en tableau pour faire le sort et avoir un resultat en tableau
+    // Transformation en array pour appliquer .sort et avoir un resultat en tableau
 const uniqueNamesArray = Array.from(uniqueNamesSet);
-// Tri des noms uniques par ordre décroissant d'ID associé
+    // Tri des noms uniques par ordre décroissant d'ID associé
 const listeNames = uniqueNamesArray.sort((nameA, nameB) => {
     // Trouver les IDs associés aux noms pour le tri
     const idA = category.find(item => item.name === nameA).id;
     const idB = category.find(item => item.name === nameB).id;
-    // Comparaison pour le tri décroissant
+    // Comparaison pour le tri croissant
     return idA - idB;
 });
 
@@ -82,9 +104,6 @@ if (listeNames.length != 0)
     listeNames.unshift('Tous');
 }
 
-
-
-// Gestion des bouton filtres
 
 const group = document.getElementById("filtres");
 group.innerHTML = "";
@@ -150,3 +169,55 @@ for (let i = 0; i < buttons.length; i++) {
     });
 }
 
+
+
+/////// MODALE ////////
+
+const modal = document.getElementById("modal1");
+
+// ouverture modale
+
+modifier.addEventListener ('click', function () {
+
+    modal.classList.remove('hidden');
+    modal.addEventListener ('click', CloseModal)
+    afficherWorksModal(works)
+    
+});
+
+//fermeture modale
+
+function CloseModal (e)
+{
+    
+    if ((e.target === document.querySelector("#modal1"))||(e.target === document.querySelector(".fa-times")))
+    {
+        modal.classList.add('hidden');
+        // on vide la gallery
+        const gallery = document.querySelector(".modal-gallery");
+        gallery.innerHTML = "";
+    }
+}
+
+
+//fonction pour afficher la liste complete des works dans la modale
+function afficherWorksModal(works){
+    for (let i = 0; i < works.length; i++) {
+
+        const work = works[i];
+        // Récupération de l'élément du DOM qui accueillera les "works"
+        const groupWorkModal = document.querySelector(".modal-gallery"); 
+        // Création d’une balise dédiée aux "works"
+        const workElementModal = document.createElement("figure"); 
+        // Création des img (lien + alt) 
+        const imageWorkModal = document.createElement("img");
+        imageWorkModal.src = work.imageUrl;
+        imageWorkModal.alt = work.title;
+        
+        // On rattache le workElement (figures) au groupWork (gallery)
+        groupWorkModal.appendChild(workElementModal);
+        // On rattache les deux elements (img et title) au workElement (figures) 
+        workElementModal.appendChild(imageWorkModal);
+        
+    }
+}

@@ -13,63 +13,97 @@
 	<script type="module" src="main.js"></script>
 
 </head>
+
 <body>
-<header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-	<nav>
-		<ul>
-			<li><a href="#portfolio">projets</a></li>
-			<li><a href="#contact">contact</a></li>
-			<li><span id="login_logout">login</span></li>
-			<li><a href="https://www.instagram.com/" target="_blank"><img src="./assets/icons/instagram.png" alt="Instagram"></a></li>
+
+	<div id="edition-mode" class="hidden">
+		<span class="fa-regular fa-pen-to-square" aria-hidden="true"></span>
+		<span> Mode édition</span>
+	</div>
+
+	<header>
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+		<nav>
+			<ul>
+				<li><a href="#portfolio">projets</a></li>
+				<li><a href="#contact">contact</a></li>
+				<li><span id="login_logout">login</span></li>
+				<li><a href="https://www.instagram.com/" target="_blank"><img src="./assets/icons/instagram.png" alt="Instagram"></a></li>
+				
+			</ul>
+		</nav>
+	</header>
+
+
+	<main>
+		<section id="introduction">
+			<figure>
+				<img src="./assets/images/sophie-bluel.png" alt="">
+			</figure>
+			<article>
+				<h2>Designer d'espace</h2>
+				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
+				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
+				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
+			</article>
+		</section>
+		<section id="portfolio">
 			
-		</ul>
-	</nav>
-</header>
-<main>
-	<section id="introduction">
-		<figure>
-			<img src="./assets/images/sophie-bluel.png" alt="">
-		</figure>
-		<article>
-			<h2>Designer d'espace</h2>
-			<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
-			<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
-			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
-		</article>
-	</section>
-	<section id="portfolio">
-		
-			<h2>Mes Projets</h2>
-			<button id="bouton-modifier"><i class="fa-regular fa-pen-to-square"></i>modifier</button>
-		
-		
-		<div id="filtres"></div>
+				<div class="mesprojets">
+					<h2>Mes Projets</h2>
+					
+					<a href="#modal1" id="bouton-modifier" class="hidden">
+						<i class="fa-lg fa-solid fa-pen-to-square" aria-hidden="true"></i><span>modifier</span>
+					</a>
+				</div>
+			
+			<div id="filtres"></div>
 
-		<div class="gallery"></div>
-		
-	</section>
-	<section id="contact">
-		<h2>Contact</h2>
-		<p>Vous avez un projet ? Discutons-en !</p>
-		<form action="#" method="post">
-			<label for="name">Nom</label>
-			<input type="text" name="name" id="name">
-			<label for="email">Email</label>
-			<input type="email" name="email" id="email">
-			<label for="message">Message</label>
-			<textarea name="message" id="message" cols="30" rows="10"></textarea>
-			<input type="submit" value="Envoyer">
-		</form>
-	</section>
-</main>
+			<div class="gallery"></div>
+			
+		</section>
+		<section id="contact">
+			<h2>Contact</h2>
+			<p>Vous avez un projet ? Discutons-en !</p>
+			<form action="#" method="post">
+				<label for="name">Nom</label>
+				<input type="text" name="name" id="name">
+				<label for="email">Email</label>
+				<input type="email" name="email" id="email">
+				<label for="message">Message</label>
+				<textarea name="message" id="message" cols="30" rows="10"></textarea>
+				<input type="submit" value="Envoyer">
+			</form>
+		</section>
+	</main>
 
-<footer>
-	<nav>
-		<ul>
-			<li>Mentions Légales</li>
-		</ul>
-	</nav>
-</footer>
+
+	<footer>
+		<nav>
+			<ul>
+				<li>Mentions Légales</li>
+			</ul>
+		</nav>
+	</footer>
+
+
+
+
+	<!-- Modal1 -->
+
+	<div id="modal1" class="modal hidden">
+		<div class="modal-content">
+			<div class="close-button"><i class="fas fa-times" aria-hidden="true"></i></div>
+			<div class="cadre">
+				<h2>Galerie photo</h2>
+				<div class="modal-gallery"></div>
+				<div class="separateur"></div>
+				<button id="butt_ajouter_photo">Ajouter une photo</button>
+				
+			</div>
+		</div>
+	</div>
+
+
 </body>
 </html>
