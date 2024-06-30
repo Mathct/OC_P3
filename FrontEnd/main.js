@@ -90,7 +90,7 @@ afficherWorks(works);
 
 
 
-// Gestion des boutons categories
+// Creation des boutons categories
 function afficherCategorie(works)
 {
     let listcategory = [];
@@ -270,15 +270,24 @@ function afficherWorksModal(works)
     {
         let a = poubellelistener[i].id;
         let b = document.getElementById(a);
-        b.addEventListener('click', SupprimerWork);
+        b.addEventListener('click', ConfirmerSupprimerWork);
     }
     
 }
 
+/// confirmation de suppression
 
-//fonction delete work
+function ConfirmerSupprimerWork(e){
+    
+    const confirm = confirm("Êtes-vous sûr de vouloir supprimer le projet ?");
+    if (confirm) {
+        SupprimerWork(e);
+    } 
+}
 
-function SupprimerWork (e)
+/// fonction Supprimer Projet
+
+function SupprimerWork(e)
 {
     
     const suppId = e.target.id.split("_")[1];
