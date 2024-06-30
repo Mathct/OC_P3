@@ -46,9 +46,10 @@ else
 //recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
 const reponse = await fetch('http://localhost:5678/api/works');
 let works = await reponse.json();
-//recuperation et stockage des données categories sur l'api
+//recuperation et stockage des données categories sur l'api pour le menu deroulant de la modale pour ajouter des projets
 const reponse2 = await fetch('http://localhost:5678/api/categories');
 const category = await reponse2.json();
+
 
 
 //fonction pour afficher la liste complete des works
@@ -90,90 +91,116 @@ afficherWorks(works);
 
 
 // Gestion des boutons categories
+function afficherCategorie(works)
+{
+    let listcategory = [];
 
+    for (let i = 0; i < works.length; i++) 
+    {
+        listcategory.push(works[i].category)
+    }
+    
+    
     // Extraction des noms uniques des catégories 
-const uniqueNamesSet = new Set(category.map(item => item.name));
+    const uniqueNamesSet = new Set(listcategory.map(item => item.name));
     // Transformation en array pour appliquer .sort et avoir un resultat en tableau
-const uniqueNamesArray = Array.from(uniqueNamesSet);
+    const uniqueNamesArray = Array.from(uniqueNamesSet);
     // Tri des noms uniques par ordre décroissant d'ID associé
-const listeNames = uniqueNamesArray.sort((nameA, nameB) => {
+    let listeNames = uniqueNamesArray.sort((nameA, nameB) => {
     // Trouver les IDs associés aux noms pour le tri
-    const idA = category.find(item => item.name === nameA).id;
-    const idB = category.find(item => item.name === nameB).id;
+    const idA = listcategory.find(item => item.name === nameA).id;
+    const idB = listcategory.find(item => item.name === nameB).id;
     // Comparaison pour le tri croissant
     return idA - idB;
-});
+    });
 
-if (listeNames.length != 0)
-{
-    listeNames.unshift('Tous');
-}
-
-
-const group = document.getElementById("filtres");
-group.innerHTML = "";
-
-    // creation des boutons
-for (let i=0; i<listeNames.length; i++)
+    
+    if (listeNames.length != 0)
     {
-        const bouton = document.createElement("div");
-        bouton.id = "bouton_"+i;
-        bouton.innerText = listeNames[i];
-        group.appendChild(bouton);
-        var element = document.getElementById('bouton_'+i);
-        element.classList.add('filtre');
-        if (i==0)
-            {
-                element.classList.add('filtre_actif');
-            }
+        listeNames.unshift('Tous');  // on rajoute "Tous" en premiere place
     }
+
+    
+    // nettoyage des boutons
+    const group = document.getElementById("filtres");
+    group.innerHTML = "";
+
+    // creation des boutons (le but est d'avoir le numero de l'id de la categorie dans les id des boutons respectifs afin de ne pas afficher les categories vides)
+
+    // Extraction des ids uniques des catégories 
+    const uniqueIdSet = new Set(listcategory.map(item => item.id));
+    // transformation en array et Tri par ordre croissant des id
+    const uniqueIdTri= Array.from(uniqueIdSet).sort((a, b) => a - b);
+
+    if (uniqueIdTri.length != 0)
+        {
+            uniqueIdTri.unshift("tous"); // on rajoute "tous" en premiere place (id du bouton "Tous").. je ne mets pas 0 si jamais un id 0 de categorie est créé
+        }
+
+    for (let i=0; i<listeNames.length; i++)
+        {
+            const bouton = document.createElement("div");
+            bouton.id = "bouton_"+uniqueIdTri[i];
+            bouton.innerText = listeNames[i];
+            group.appendChild(bouton);
+            var element = document.getElementById('bouton_'+uniqueIdTri[i]);
+            element.classList.add('filtre');
+            if (i==0)
+                {
+                    element.classList.add('filtre_actif');
+                }
+        }
 
     // Creation des EventListener
     // on recupere tous les boutons avec la classe filtre et on applique les modifications de styles
-const buttons = document.querySelectorAll('.filtre');
+    const buttons = document.querySelectorAll('.filtre');
 
-for (let i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener('click', function () {
-        
-        if(i==0)
-            {
-                document.querySelector(".gallery").innerHTML = "";
-                for (let j=0; j<listeNames.length; j++)
-                {
-                    var element = document.getElementById('bouton_'+j);
-                    if (element.classList.contains('filtre_actif'))
-                        {
-                            element.classList.remove('filtre_actif');
-                        }
-                        
-                }
-                document.querySelector("#bouton_"+i).classList.add('filtre_actif');
-                afficherWorks(works);
-            }
-
-        else
-        {
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function () {
             
-                const filtrework = works.filter(objet=> objet.categoryId == i);
-                document.querySelector(".gallery").innerHTML = "";
-                for (let j=0; j<listeNames.length; j++)
+            if(i==0)
+                {
+                    document.querySelector(".gallery").innerHTML = "";
+                    for (let j=0; j<listeNames.length; j++)
                     {
-                        var element = document.getElementById('bouton_'+j);
+                        var element = document.getElementById('bouton_'+uniqueIdTri[j]);
                         if (element.classList.contains('filtre_actif'))
                             {
                                 element.classList.remove('filtre_actif');
                             }
                             
                     }
-                document.querySelector("#bouton_"+i).classList.add('filtre_actif');
-                afficherWorks(filtrework);
-            
+                    document.querySelector("#bouton_"+uniqueIdTri[i]).classList.add('filtre_actif');
+                    afficherWorks(works);
+                }
 
-        }
+            else
+            {
+                
+                    const filtrework = works.filter(objet=> objet.categoryId == uniqueIdTri[i]);
+                    document.querySelector(".gallery").innerHTML = "";
+                    for (let j=0; j<listeNames.length; j++)
+                        {
+                            var element = document.getElementById('bouton_'+uniqueIdTri[j]);
+                            if (element.classList.contains('filtre_actif'))
+                                {
+                                    element.classList.remove('filtre_actif');
+                                }
+                                
+                        }
+                    document.querySelector("#bouton_"+uniqueIdTri[i]).classList.add('filtre_actif');
+                    afficherWorks(filtrework);
+                
 
-    });
+            }
+
+        });
+    }
+
 }
 
+// et on execute la fonction
+afficherCategorie(works)
 
 
 /////// MODALE ////////
@@ -187,14 +214,7 @@ modifier.addEventListener ('click', function () {
     modal.addEventListener ('click', CloseModal);
     afficherWorksModal(works);
 
-    const poubelle = document.querySelectorAll(".fa-trash-can");
-    for (let i=0; i<poubelle.length; i++)
-        {
-            let a = poubelle[i].id;
-            let b = document.getElementById(a);
-            b.addEventListener('click', SupprimerWork);
-        }
-    
+        
 });
 
 //fermeture modale
@@ -210,7 +230,8 @@ function CloseModal (e)
 
 
 //fonction pour afficher la liste complete des works dans la modale ainsi que les boutons delete
-function afficherWorksModal(works){
+function afficherWorksModal(works)
+{
 
     // Récupération de l'élément du DOM qui accueillera les "works"
     // on vide la gallery pour ne pas que les works se rajoutent automatiquement à l'ouverture et a la modification (suppression et ajout)
@@ -239,8 +260,19 @@ function afficherWorksModal(works){
         workElementModal.appendChild(imageWorkModal);
         // on rattache la poubelle à workElement 
         workElementModal.appendChild(poubelle);
-        
+
+             
     }
+
+    // ajout addEventListener à tous les boutons "poubelle"
+    const poubellelistener = document.querySelectorAll(".fa-trash-can");
+    for (let i=0; i<poubellelistener.length; i++)
+    {
+        let a = poubellelistener[i].id;
+        let b = document.getElementById(a);
+        b.addEventListener('click', SupprimerWork);
+    }
+    
 }
 
 
@@ -267,6 +299,7 @@ function SupprimerWork (e)
           //je relance mes deux fonctions d'affichage
           afficherWorks(works);
           afficherWorksModal(works);
+          afficherCategorie(works);
           
         } 
         
