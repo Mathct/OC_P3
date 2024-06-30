@@ -370,7 +370,7 @@ a:hover {
     display: none !important;
 }
 
-.modal-content {
+.modal1-content {
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -403,7 +403,7 @@ a:hover {
 	
 }
 
-.modal-content h2 {
+.modal1-content h2 {
 	font-size: 26px;
 	font-weight: 400;
 	line-height: 30.5px;
@@ -459,5 +459,33 @@ a:hover {
 	height: 100%;
 	object-fit: cover;
 	
-
 }
+
+.modal-gallery figure {
+	position: relative;
+}
+
+figure i {
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	color: white;
+	background-color: black;
+	width: 17px;
+	height: 17px;
+	box-sizing: border-box;
+	padding-left: 3px;
+	padding-top: 2px;
+	
+
+	
+}
+
+.fa-trash-can {
+	font-weight: 100;
+	font-size: 11px;
+	cursor: pointer;
+	
+}
+
+

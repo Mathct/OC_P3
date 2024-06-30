@@ -5,7 +5,7 @@ const modifier = document.getElementById("bouton-modifier");
 const groupefiltre = document.getElementById("filtres");
 const editionmode = document.getElementById("edition-mode");
 
-let token = window.localStorage.getItem('TokenAuth');
+const token = window.localStorage.getItem('TokenAuth');
 
 // declaration des deux fonction login et logout - Afin de ne pas avoir besoin de recharger la page après un logout
 
@@ -43,9 +43,9 @@ else
 
 
 
-//recuperation et stockage des données works sur l'api
+//recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
 const reponse = await fetch('http://localhost:5678/api/works');
-const works = await reponse.json();
+let works = await reponse.json();
 //recuperation et stockage des données categories sur l'api
 const reponse2 = await fetch('http://localhost:5678/api/categories');
 const category = await reponse2.json();
@@ -53,11 +53,17 @@ const category = await reponse2.json();
 
 //fonction pour afficher la liste complete des works
 function afficherWorks(works){
+
+    // Récupération de l'élément du DOM qui accueillera les "works"
+    // on vide la gallery pour ne pas que les works se rajoutent automatiquement à l'ouverture et a la modification (suppression et ajout)
+    const groupWork = document.querySelector(".gallery");
+    groupWork.innerHTML = "";
+
+
     for (let i = 0; i < works.length; i++) {
 
         const work = works[i];
-        // Récupération de l'élément du DOM qui accueillera les "works"
-        const groupWork = document.querySelector(".gallery"); 
+        
         // Création d’une balise dédiée aux "works"
         const workElement = document.createElement("figure"); 
         // Création des img (lien + alt) 
@@ -83,7 +89,7 @@ afficherWorks(works);
 
 
 
-// Gestion des bouton filtres
+// Gestion des boutons categories
 
     // Extraction des noms uniques des catégories 
 const uniqueNamesSet = new Set(category.map(item => item.name));
@@ -172,51 +178,102 @@ for (let i = 0; i < buttons.length; i++) {
 
 /////// MODALE ////////
 
-const modal = document.getElementById("modal1");
+const modal = document.getElementById("modal");
 
-// ouverture modale
-
+// ouverture modale1
 modifier.addEventListener ('click', function () {
 
     modal.classList.remove('hidden');
-    modal.addEventListener ('click', CloseModal)
-    afficherWorksModal(works)
+    modal.addEventListener ('click', CloseModal);
+    afficherWorksModal(works);
+
+    const poubelle = document.querySelectorAll(".fa-trash-can");
+    for (let i=0; i<poubelle.length; i++)
+        {
+            let a = poubelle[i].id;
+            let b = document.getElementById(a);
+            b.addEventListener('click', SupprimerWork);
+        }
     
 });
 
 //fermeture modale
-
 function CloseModal (e)
 {
     
-    if ((e.target === document.querySelector("#modal1"))||(e.target === document.querySelector(".fa-times")))
+    if ((e.target === document.querySelector("#modal"))||(e.target === document.querySelector(".fa-times")))
     {
         modal.classList.add('hidden');
-        // on vide la gallery
-        const gallery = document.querySelector(".modal-gallery");
-        gallery.innerHTML = "";
+        
     }
 }
 
 
-//fonction pour afficher la liste complete des works dans la modale
+//fonction pour afficher la liste complete des works dans la modale ainsi que les boutons delete
 function afficherWorksModal(works){
+
+    // Récupération de l'élément du DOM qui accueillera les "works"
+    // on vide la gallery pour ne pas que les works se rajoutent automatiquement à l'ouverture et a la modification (suppression et ajout)
+    const groupWorkModal = document.querySelector(".modal-gallery");
+    groupWorkModal.innerHTML = "";
+
     for (let i = 0; i < works.length; i++) {
 
         const work = works[i];
-        // Récupération de l'élément du DOM qui accueillera les "works"
-        const groupWorkModal = document.querySelector(".modal-gallery"); 
+        
         // Création d’une balise dédiée aux "works"
         const workElementModal = document.createElement("figure"); 
         // Création des img (lien + alt) 
         const imageWorkModal = document.createElement("img");
         imageWorkModal.src = work.imageUrl;
         imageWorkModal.alt = work.title;
+        //creation des boutons delete
+        const poubelle = document.createElement("i");
+        poubelle.id = "poubelle_"+work.id;
+        poubelle.classList.add("fa-solid", "fa-trash-can");
+
         
         // On rattache le workElement (figures) au groupWork (modal-gallery)
         groupWorkModal.appendChild(workElementModal);
-        // On rattache les deux elements (img et title) au workElement (figures) 
+        // On rattache imageWorkModal (img) au workElement (figures) 
         workElementModal.appendChild(imageWorkModal);
+        // on rattache la poubelle à workElement 
+        workElementModal.appendChild(poubelle);
         
     }
+}
+
+
+//fonction delete work
+
+function SupprimerWork (e)
+{
+    
+    const suppId = e.target.id.split("_")[1];
+
+    fetch('http://localhost:5678/api/works/'+suppId, {
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }).then((reponseAPI) => {
+        
+        if (reponseAPI.ok) 
+        {
+          alert("Projet supprimé")
+          
+          // Je recrée mon works sans l'image supprimé (pour eviter de refaire un fetch)
+          works = works.filter((work) => work.id != suppId);
+          //je relance mes deux fonctions d'affichage
+          afficherWorks(works);
+          afficherWorksModal(works);
+          
+        } 
+        
+        else 
+        {
+          alert("Erreur : " + response.status);
+        }
+      });
+    
 }
