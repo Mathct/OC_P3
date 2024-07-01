@@ -224,12 +224,16 @@ afficherCategorie(works)
 
 const modal = document.getElementById("modal");
 
+
 // ouverture modale1
 modifier.addEventListener ('click', function () {
 
     modal.classList.remove('hidden');
-    modal.addEventListener ('click', CloseModal);
     afficherWorksModal(works);
+    modal.addEventListener ('click', CloseModal);
+
+    const ajouter = document.getElementById("butt_ajouter_photo");
+    ajouter.addEventListener ('click', openModal2);
 
         
 });
@@ -237,9 +241,14 @@ modifier.addEventListener ('click', function () {
 //fermeture modale
 function CloseModal (e)
 {
-    
-    if ((e.target === document.querySelector("#modal"))||(e.target === document.querySelector(".fa-times")))
+
+    if ((e.target === document.querySelector("#modal"))||(e.target === document.querySelector(".close1"))||(e.target === document.querySelector(".close2")))
     {
+        
+        const modal1 = document.querySelector(".modal1-content");
+        modal1.classList.remove('hidden');
+        const modal2 = document.querySelector(".modal2-content");
+        modal2.classList.add('hidden');
         modal.classList.add('hidden');
         
     }
@@ -291,7 +300,6 @@ function afficherWorksModal(works)
         let b = document.getElementById(a);
         b.addEventListener('click', ConfirmerSupprimerWork);
 
-        console.log ("ok")
     }
     
 }
@@ -331,7 +339,7 @@ function SupprimerWork (e)
           
           // Je recrée mon works sans l'image supprimé (pour eviter de refaire un fetch)
           works = works.filter((work) => work.id != suppId);
-          //je relance mes deux fonctions d'affichage
+          //je relance mes 3 fonctions d'affichage
           afficherWorks(works);
           afficherWorksModal(works);
           afficherCategorie(works);
@@ -340,7 +348,7 @@ function SupprimerWork (e)
         
         else 
         {
-          alert("Erreur : " + response.status);
+          alert("Une erreur est survenue: "+response.status);
         }
       });
     
@@ -349,4 +357,24 @@ function SupprimerWork (e)
 //////////////////////////////////////////////////////////////////
 /// Gestion de la modale d'Ajout de projet
 //////////////////////////////////////////////////////////////////
+
+// ouverture modale 2
+function openModal2()
+{
+    const modal1 = document.querySelector(".modal1-content");
+    modal1.classList.add('hidden');
+    const modal2 = document.querySelector(".modal2-content");
+    modal2.classList.remove('hidden');
+    const prev = document.querySelector(".prev");
+    prev.addEventListener('click', Prev)
+
+}
+
+function Prev () 
+{
+    const modal1 = document.querySelector(".modal1-content");
+    modal1.classList.remove('hidden');
+    const modal2 = document.querySelector(".modal2-content");
+    modal2.classList.add('hidden');
+}
 

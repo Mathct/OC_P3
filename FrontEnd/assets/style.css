@@ -370,7 +370,7 @@ a:hover {
     display: none !important;
 }
 
-.modal1-content {
+.modal1-content, .modal2-content {
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -403,6 +403,14 @@ a:hover {
 	
 }
 
+.prev-button {
+	position: absolute;
+	font-size: 21px;
+	left: 20px;
+	cursor: pointer;
+	
+}
+
 .modal1-content h2 {
 	font-size: 26px;
 	font-weight: 400;
@@ -412,13 +420,23 @@ a:hover {
 
 }
 
+.modal2-content h2 {
+	font-size: 26px;
+	font-weight: 400;
+	line-height: 30.5px;
+	color: black;
+	margin-top: 40px;
+
+}
+
+
 .separateur {
     border-top: 1px solid #B3B3B3;
 	width: 420px;
 	margin-bottom: 40px;
 }
 
-.bloc_ajouter {
+.bloc_ajouter, .bloc_valider {
 	display: flex;
 	flex-direction: column;
     align-items: center;
@@ -438,6 +456,7 @@ a:hover {
 	margin-bottom: 20px;
 	border: none;
 	cursor: pointer;
+	padding: 0;
 	
 	
 }
@@ -487,5 +506,85 @@ figure i {
 	cursor: pointer;
 	
 }
+
+#butt_valider {
+
+	color: white;
+	background-color: #1D6154;
+	width: 237px;
+	height: 36px;
+	border-radius: 60px ;
+	font-size: 14px;
+	font-weight: 700;
+	margin-bottom: 20px;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	
+	
+}
+
+.formulaire {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+#blocphoto {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+	text-align: center;
+	background-color: #E8F1F6;
+	border-radius: 3px;
+	width: 100%;
+	box-sizing: border-box;
+	height: 169px;
+}
+#blocphoto p {
+	font-size: 10px;
+	font-weight: 400;
+}
+
+
+#icon_choisir_photo {
+	width: 76px;
+	height: 76px;
+}
+
+#choisir_photo  {
+	font-family: 'Work Sans';
+	font-size: 14px;
+	font-weight: 500;
+	color: #306685;
+	background-color: #CBD6DC;
+	
+	padding: 10px 33px;
+	margin-bottom: 10px;
+	cursor: pointer;
+	border-radius: 50px;
+	
+}
+
+#AjouterProjet label {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 16.42px;
+	color: #3D3D3D;
+	margin-bottom: 10px;
+	margin-top: 30px;
+}
+
+#AjouterProjet input,select {
+	height: 51px;
+	box-sizing: border-box;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	font-size: 16px;
+	text-align: center;
+
+}
+
 
 

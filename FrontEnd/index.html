@@ -94,7 +94,7 @@
 	<div id="modal" class="modal hidden">
 
 		<div class="modal1-content">
-			<div class="close-button"><i class="fas fa-times" aria-hidden="true"></i></div>
+			<div class="close-button"><i class="fas fa-times close1" aria-hidden="true"></i></div>
 			<div class="cadre">
 				<h2>Galerie photo</h2>
 				<div class="modal-gallery"></div>
@@ -107,21 +107,37 @@
 		</div>
 
 		<div class="modal2-content hidden">
-			<div class="close-button"><i class="fas fa-times" aria-hidden="true"></i></div>
-			<div class="prev-button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></div>
+			<div class="close-button"><i class="fas fa-times close2" aria-hidden="true"></i></div>
+			<div class="prev-button"><i class="fa-solid fa-arrow-left prev" aria-hidden="true"></i></div>
 			<div class="cadre">
 				<h2>Ajout photo</h2>
+
+				<form id="AjouterProjet" class="formulaire" name="ajouterProjet">
+
+					<div id="blocphoto">
+						<img src="./assets/icons/imageajoutphoto.png" id="icon_choisir_photo" alt="Choisir une image">
+						<label for="insererphoto" id="choisir_photo">+ Ajouter photo</label>
+						<p>jpg, png : 4mo max</p>
+					</div>
+
+					<div id="photo_preview" class="hidden">
+						<img src="#" alt="Votre photo" id="photo_preview_image">
+					</div>
+					<input type="file" class="hidden" name="photo" id="insererphoto" accept="image/png, image/jpeg" required>
+					<label for="titre">Titre</label>
+					<input type="text" id="titre" name="titre" required>
+					<label for="selectionCategorie">Catégorie</label>
+					<select id="selectionCategorie" name="selectionCategorie">
+					</select>
+				</form>
 				
-
-
-				<div class="bloc_ajouter">
+				<div class="bloc_valider">
 					<div class="separateur"></div>
-					<button id="butt_valider">Valider</button>
+					<button type="submit" id="butt_valider">Valider</button>
 				</div>
-				
 			</div>
 		</div>
-
+		
 	</div>
 
 
