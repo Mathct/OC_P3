@@ -1,4 +1,6 @@
-//Déclaration des variables au chargement de la page
+//////////////////////////////////////////////////////////////////
+/// Déclaration des variables au chargement de la page
+//////////////////////////////////////////////////////////////////
 
 const textlog = document.getElementById("login_logout");
 const modifier = document.getElementById("bouton-modifier");
@@ -7,7 +9,9 @@ const editionmode = document.getElementById("edition-mode");
 
 const token = window.localStorage.getItem('TokenAuth');
 
-// declaration des deux fonction login et logout - Afin de ne pas avoir besoin de recharger la page après un logout
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// declaration des deux fonction login et logout - Afin de ne pas avoir besoin de recharger la page après un logout
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 function Login ()
 {
@@ -24,7 +28,9 @@ function Logout ()
     textlog.addEventListener('click', Login)
 }
 
-// Init lors du chargement de la page en fonction de l'etat du TokenAuth
+//////////////////////////////////////////////////////////////////
+/// Init lors du chargement de la page en fonction de l'etat du TokenAuth
+//////////////////////////////////////////////////////////////////
 
 if (token != null)
 {
@@ -40,8 +46,9 @@ else
     textlog.addEventListener('click', Login)
 }
 
-
-
+//////////////////////////////////////////////////////////////////
+/// Recuperation des données de l'API
+//////////////////////////////////////////////////////////////////
 
 //recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
 const reponse = await fetch('http://localhost:5678/api/works');
@@ -51,8 +58,10 @@ const reponse2 = await fetch('http://localhost:5678/api/categories');
 const category = await reponse2.json();
 
 
+//////////////////////////////////////////////////////////////////
+/// fonction pour afficher la liste complete des works
+//////////////////////////////////////////////////////////////////
 
-//fonction pour afficher la liste complete des works
 function afficherWorks(works){
 
     // Récupération de l'élément du DOM qui accueillera les "works"
@@ -89,8 +98,10 @@ afficherWorks(works);
 
 
 
+//////////////////////////////////////////////////////////////////
+/// Creation des boutons categories
+//////////////////////////////////////////////////////////////////
 
-// Creation des boutons categories
 function afficherCategorie(works)
 {
     let listcategory = [];
@@ -151,7 +162,10 @@ function afficherCategorie(works)
                 }
         }
 
-    // Creation des EventListener
+//////////////////////////////////////////////////////////////////
+/// Creation des EventListener et modificications des styles
+//////////////////////////////////////////////////////////////////
+
     // on recupere tous les boutons avec la classe filtre et on applique les modifications de styles
     const buttons = document.querySelectorAll('.filtre');
 
@@ -203,7 +217,10 @@ function afficherCategorie(works)
 afficherCategorie(works)
 
 
-/////// MODALE ////////
+
+//////////////////////////////////////////////////////////////////
+///////////////////////GESTION DES MODALES ///////////////////////
+//////////////////////////////////////////////////////////////////
 
 const modal = document.getElementById("modal");
 
@@ -228,8 +245,10 @@ function CloseModal (e)
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// fonction pour afficher la liste complete des works dans la modale ainsi que les boutons delete
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
-//fonction pour afficher la liste complete des works dans la modale ainsi que les boutons delete
 function afficherWorksModal(works)
 {
 
@@ -271,23 +290,30 @@ function afficherWorksModal(works)
         let a = poubellelistener[i].id;
         let b = document.getElementById(a);
         b.addEventListener('click', ConfirmerSupprimerWork);
+
+        console.log ("ok")
     }
     
 }
 
+//////////////////////////////////////////////////////////////////
 /// confirmation de suppression
+//////////////////////////////////////////////////////////////////
 
-function ConfirmerSupprimerWork(e){
+function ConfirmerSupprimerWork (e)
+{
     
-    const confirm = confirm("Êtes-vous sûr de vouloir supprimer le projet ?");
-    if (confirm) {
+    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer le projet ?");
+    if (confirmation) {
         SupprimerWork(e);
     } 
 }
 
+//////////////////////////////////////////////////////////////////
 /// fonction Supprimer Projet
+//////////////////////////////////////////////////////////////////
 
-function SupprimerWork(e)
+function SupprimerWork (e)
 {
     
     const suppId = e.target.id.split("_")[1];
@@ -319,3 +345,8 @@ function SupprimerWork(e)
       });
     
 }
+
+//////////////////////////////////////////////////////////////////
+/// Gestion de la modale d'Ajout de projet
+//////////////////////////////////////////////////////////////////
+

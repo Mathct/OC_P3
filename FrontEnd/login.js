@@ -1,4 +1,9 @@
-// recuperation du formulaire et de mon message d'erreur
+//////////////////////////////////////////////////////////////////
+///Gestion du login
+//////////////////////////////////////////////////////////////////
+
+
+// recuperation du formulaire et ma zone de message d'erreur
 const formulaire = document.querySelector(".info-login");
 const message = document.getElementById("message-error");
 
