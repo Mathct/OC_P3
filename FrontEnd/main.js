@@ -9,8 +9,21 @@ const editionmode = document.getElementById("edition-mode");
 
 const token = window.localStorage.getItem('TokenAuth');
 
+//////////////////////////////////////////////////////////////////
+/// Recuperation des données de l'API
+//////////////////////////////////////////////////////////////////
+
+//recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
+const reponse = await fetch('http://localhost:5678/api/works');
+let works = await reponse.json();
+//recuperation et stockage des données categories sur l'api pour le menu deroulant de la modale pour ajouter des projets
+const reponse2 = await fetch('http://localhost:5678/api/categories');
+const category = await reponse2.json();
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-/// declaration des deux fonction login et logout - Afin de ne pas avoir besoin de recharger la page après un logout
+/// fonction login et logout - Afin de ne pas avoir besoin de recharger la page après un logout
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 function Login ()
@@ -45,17 +58,6 @@ else
 {
     textlog.addEventListener('click', Login)
 }
-
-//////////////////////////////////////////////////////////////////
-/// Recuperation des données de l'API
-//////////////////////////////////////////////////////////////////
-
-//recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
-const reponse = await fetch('http://localhost:5678/api/works');
-let works = await reponse.json();
-//recuperation et stockage des données categories sur l'api pour le menu deroulant de la modale pour ajouter des projets
-const reponse2 = await fetch('http://localhost:5678/api/categories');
-const category = await reponse2.json();
 
 
 //////////////////////////////////////////////////////////////////
@@ -250,6 +252,28 @@ function CloseModal (e)
         const modal2 = document.querySelector(".modal2-content");
         modal2.classList.add('hidden');
         modal.classList.add('hidden');
+
+        // suppression de la photo preview s'il y en a eu une de chargée
+        var previewElement = document.getElementById('preview');
+        if (previewElement) 
+        {
+            previewElement.remove();
+            var imagePreviewDiv = document.getElementById('photo_preview');
+            imagePreviewDiv.classList.add('hidden');
+        }
+
+        // Réinitialiser la valeur du champ de fichier pour permettre de re-sélectionner le même fichier
+        document.getElementById("photo_file").value ='';
+
+        // on affcihe les elements de la modale2 qui ont peut etre été masqués (si photo preview chargée)
+        const icon_upload_image = document.getElementById('icon_choisir_photo');
+        icon_upload_image.classList.remove('hidden');
+        const butt_upload_image = document.getElementById('choisir_photo');
+        butt_upload_image.classList.remove('hidden');
+        const bloc_upload_image = document.getElementById('blocphoto');
+        const text_upload_image = bloc_upload_image.querySelector('p');
+        text_upload_image.classList.remove('hidden');
+        
         
     }
 }
@@ -311,8 +335,8 @@ function afficherWorksModal(works)
 function ConfirmerSupprimerWork (e)
 {
     
-    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer le projet ?");
-    if (confirmation) {
+    const validation = confirm("Êtes-vous sûr de vouloir supprimer le projet ?");
+    if (validation) {
         SupprimerWork(e);
     } 
 }
@@ -368,13 +392,189 @@ function openModal2()
     const prev = document.querySelector(".prev");
     prev.addEventListener('click', Prev)
 
+    // pour supprimer le titre si l'utilisation a taper un titre puis fermé la modale et qu'il revient sur la modale (le champ doit être de nouveau vide)
+    const titre = document.getElementById("titre");
+    titre.value  = "";
+
+    // charger la liste des categories dans le menu déroulant //
+    //nettoyage menu
+    document.querySelector("#menu_deroulant").innerHTML = "";
+    // premiere option vide //
+    let option = document.createElement("option");
+    document.querySelector("#menu_deroulant").appendChild(option);
+    
+    for (let i=0; i<category.length; i++)
+    {
+        let option = document.createElement("option");
+        option.value = category[i].name;
+        option.innerText = category[i].name;
+        option.id = "categorie_"+category[i].id;
+        document.getElementById("menu_deroulant").appendChild(option);
+    }
+
+    // ajout listener sur bouton valider
+    const valider = document.getElementById("butt_valider");
+    valider.addEventListener ('click', ValiderAjout);
+
+    // traitement de la selection d'image
+    //listener sur l'id 'insererphoto' de l'input pour detecter un changement (qui signifie que l'utilisateur a selectionné une photo)
+    document.getElementById('photo_file').addEventListener('change', function(event) {
+        // Récupérer le fichier sélectionné ... ici on recupere le premier (si jmamais il y en a plusieurs de selectionné)
+        var file = event.target.files[0];
+        
+        // Vérifie si file n'est pas null ou undefined, c'est-à-dire si un fichier a effectivement été sélectionné
+        if (file) {
+            // Crée un nouvel objet FileReader pour lire le contenu du fichier.
+            var reader = new FileReader();
+            
+            // Définit une fonction à exécuter lorsque le fichier est complètement lu. L'événement load est déclenché lorsqu'une lecture réussie est terminée.
+            reader.onload = function(e) {
+                // Créer une nouvelle balise img
+                var img = document.createElement('img');
+                img.id = "preview";
+                
+                // Définir l'attribut src de la balise img à l'URL de l'image lue
+                img.src = e.target.result;
+                
+                // S'assurer que l'image s'ajuste à la div
+                img.style.maxHeight = '100%';
+                
+                // Sélectionner la div où l'image doit être affichée
+                var imagePreviewDiv = document.getElementById('photo_preview');
+                
+                // Vider le contenu de la div avant d'ajouter une nouvelle image
+                imagePreviewDiv.innerHTML = '';
+                
+                // Ajouter l'image à la div
+                imagePreviewDiv.appendChild(img);
+
+                //enlever le hidden sur photo_preview
+                imagePreviewDiv.classList.remove('hidden');
+
+            };
+    
+            // Lire le contenu du fichier comme une URL de données (Data URL)
+            reader.readAsDataURL(file);
+
+
+            // on masque les elements de la modale à cacher
+            const icon_upload_image = document.getElementById('icon_choisir_photo');
+            icon_upload_image.classList.add('hidden');
+            const butt_upload_image = document.getElementById('choisir_photo');
+            butt_upload_image.classList.add('hidden');
+            const bloc_upload_image = document.getElementById('blocphoto');
+            const text_upload_image = bloc_upload_image.querySelector('p');
+            text_upload_image.classList.add('hidden');
+
+        }
+
+        
+
+    });
+
+
+    // Sélectionner le formulaire
+    const form = document.getElementById('form_add_projet');
+    // Sélectionner tous les champs du formulaire (input de type texte, input de type file, select, textarea)
+    const elements = form.querySelectorAll('input[type="text"], input[type="file"], select');
+
+    // Ajouter un écouteur d'événements 'input' ou 'change' à chaque champ selon le type
+    elements.forEach(function(element) {
+        if (element.type === 'file') {
+            element.addEventListener('change', changeBoutonColor); // Utiliser 'change' pour input de type file
+        } else {
+            element.addEventListener('input', changeBoutonColor); // Utiliser 'input' pour les autres champs
+        }
+    });
+
+
 }
 
+// fonction pour switcher la couleur du bouton "valider"
+function changeBoutonColor()
+{
+    
+    const select = document.getElementById("menu_deroulant");
+    
+    if ((document.getElementById("titre").value != "") && (document.getElementById("photo_file").files[0] !== undefined) && (select.options[select.selectedIndex].id != ""))
+        {
+            document.querySelector("#butt_valider").style.backgroundColor = "#1D6154";
+        }
+    else
+        {
+            document.querySelector("#butt_valider").style.backgroundColor = "#A7A7A7";
+        }
+}
+
+
+
+// fonction du bouton "fleche" pour revenir a la modale precedente
 function Prev () 
 {
     const modal1 = document.querySelector(".modal1-content");
     modal1.classList.remove('hidden');
     const modal2 = document.querySelector(".modal2-content");
     modal2.classList.add('hidden');
+
+    // suppression de la photo preview s'il y en a eu une de chargée
+    var previewElement = document.getElementById('preview');
+    if (previewElement) 
+    {
+        previewElement.remove();
+        var imagePreviewDiv = document.getElementById('photo_preview');
+        imagePreviewDiv.classList.add('hidden');
+    }
+
+    // Réinitialiser la valeur du champ de fichier pour permettre de re-sélectionner le même fichier
+    document.getElementById("photo_file").value ='';
+
+    // on affcihe les elements de la modale2 qui ont peut etre été masqués (si photo preview chargée)
+    const icon_upload_image = document.getElementById('icon_choisir_photo');
+    icon_upload_image.classList.remove('hidden');
+    const butt_upload_image = document.getElementById('choisir_photo');
+    butt_upload_image.classList.remove('hidden');
+    const bloc_upload_image = document.getElementById('blocphoto');
+    const text_upload_image = bloc_upload_image.querySelector('p');
+    text_upload_image.classList.remove('hidden');
+}
+
+// fonction du bouton valider pour l'ajout d'un projet
+function ValiderAjout ()
+{
+    
+    const select = document.getElementById("menu_deroulant");
+
+    const titre = document.getElementById("titre").value;
+    const id_categorie = parseInt(select.options[select.selectedIndex].id.split("_")[1]);
+    const nom_categorie = select.options[select.selectedIndex].innerText;
+    const image = document.getElementById("photo_file").files[0];
+
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("title", titre);
+    formData.append("category", id_categorie);
+
+    fetch('http://localhost:5678/api/works', {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: formData,
+    })
+        .then((response) => {
+            if (response.ok) 
+            {
+                alert("Votre projet " +titre+ " a été créé avec succés");
+                console.log (response.json());
+            } 
+            else 
+            {
+                alert("Une erreur est survenue: "+response.status);
+            }
+        })
+        
+
+   
+    
 }
 

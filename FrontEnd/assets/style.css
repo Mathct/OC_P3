@@ -510,7 +510,7 @@ figure i {
 #butt_valider {
 
 	color: white;
-	background-color: #1D6154;
+	background-color: #A7A7A7;
 	width: 237px;
 	height: 36px;
 	border-radius: 60px ;
@@ -560,7 +560,6 @@ figure i {
 	font-weight: 500;
 	color: #306685;
 	background-color: #CBD6DC;
-	
 	padding: 10px 33px;
 	margin-bottom: 10px;
 	cursor: pointer;
@@ -568,7 +567,7 @@ figure i {
 	
 }
 
-#AjouterProjet label {
+#form_add_projet label {
 	font-size: 14px;
 	font-weight: 600;
 	line-height: 16.42px;
@@ -576,20 +575,29 @@ figure i {
 	
 }
 
-#AjouterProjet input,select {
+#form_add_projet input,select {
 	height: 51px;
 	box-sizing: border-box;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-	font-size: 16px;
-	text-align: center;
+	font-size: 14px;
+	font-weight: 400;
+	color: #444444;
+	line-height: 16.42px;
+	padding-left: 20px;
+	
 
 }
 
-.intitulelabel {
+.textlabel {
 	margin-bottom: 10px;
 	margin-top: 30px;
 }
 
+#photo_preview {
+	display: flex;
+	justify-content: center;
+	height: 169px;
+}
 
 
