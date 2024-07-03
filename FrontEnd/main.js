@@ -7,20 +7,28 @@ const modifier = document.getElementById("bouton-modifier");
 const groupefiltre = document.getElementById("filtres");
 const editionmode = document.getElementById("edition-mode");
 
-const token = window.localStorage.getItem('TokenAuth');
+let token = window.localStorage.getItem('TokenAuth');
+
 
 //////////////////////////////////////////////////////////////////
-/// Recuperation des données de l'API
+/// Init lors du chargement de la page en fonction de l'etat du TokenAuth
 //////////////////////////////////////////////////////////////////
 
-//recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
-const reponse = await fetch('http://localhost:5678/api/works');
-let works = await reponse.json();
-//recuperation et stockage des données categories sur l'api pour le menu deroulant de la modale pour ajouter des projets
-const reponse2 = await fetch('http://localhost:5678/api/categories');
-const category = await reponse2.json();
 
 
+if (token != null)
+{
+    textlog.textContent = "logout";
+    modifier.classList.remove('hidden');
+    groupefiltre.classList.add('hidden');
+    editionmode.classList.remove('hidden');
+    textlog.addEventListener('click', Logout)
+}
+
+else
+{
+    textlog.addEventListener('click', Login)
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// fonction login et logout - Afin de ne pas avoir besoin de recharger la page après un logout
@@ -42,23 +50,15 @@ function Logout ()
 }
 
 //////////////////////////////////////////////////////////////////
-/// Init lors du chargement de la page en fonction de l'etat du TokenAuth
+/// Recuperation des données de l'API
 //////////////////////////////////////////////////////////////////
 
-if (token != null)
-{
-    textlog.textContent = "logout";
-    modifier.classList.remove('hidden');
-    groupefiltre.classList.add('hidden');
-    editionmode.classList.remove('hidden');
-    textlog.addEventListener('click', Logout)
-}
-
-else
-{
-    textlog.addEventListener('click', Login)
-}
-
+//recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
+const reponse = await fetch('http://localhost:5678/api/works');
+let works = await reponse.json();
+//recuperation et stockage des données categories sur l'api pour le menu deroulant de la modale pour ajouter des projets
+const reponse2 = await fetch('http://localhost:5678/api/categories');
+const category = await reponse2.json();
 
 //////////////////////////////////////////////////////////////////
 /// fonction pour afficher la liste complete des works
@@ -347,6 +347,7 @@ function ConfirmerSupprimerWork (e)
 
 function SupprimerWork (e)
 {
+    token = window.localStorage.getItem('TokenAuth');
     
     const suppId = e.target.id.split("_")[1];
 
@@ -359,7 +360,7 @@ function SupprimerWork (e)
         
         if (reponseAPI.ok) 
         {
-          alert("Projet supprimé")
+          alert("Le projet a été supprimé avec succés")
           
           // Je recrée mon works sans l'image supprimé (pour eviter de refaire un fetch)
           works = works.filter((work) => work.id != suppId);
@@ -385,12 +386,15 @@ function SupprimerWork (e)
 // ouverture modale 2
 function openModal2()
 {
+    document.getElementById("photo_file").value ='';
+
+
     const modal1 = document.querySelector(".modal1-content");
     modal1.classList.add('hidden');
     const modal2 = document.querySelector(".modal2-content");
     modal2.classList.remove('hidden');
     const prev = document.querySelector(".prev");
-    prev.addEventListener('click', Prev)
+    prev.addEventListener('click', Previous)
 
     // pour supprimer le titre si l'utilisation a taper un titre puis fermé la modale et qu'il revient sur la modale (le champ doit être de nouveau vide)
     const titre = document.getElementById("titre");
@@ -417,13 +421,20 @@ function openModal2()
     valider.addEventListener ('click', ValiderAjout);
 
     // traitement de la selection d'image
-    //listener sur l'id 'insererphoto' de l'input pour detecter un changement (qui signifie que l'utilisateur a selectionné une photo)
+    //listener sur l'id 'insererphoto' (input du champs file du formulaire) pour detecter un changement (qui signifie que l'utilisateur a selectionné une photo)
     document.getElementById('photo_file').addEventListener('change', function(event) {
         // Récupérer le fichier sélectionné ... ici on recupere le premier (si jmamais il y en a plusieurs de selectionné)
         var file = event.target.files[0];
+
+        if (file && file.size > 4 * 1024 * 1024) { // 4 Mo en octets
+            alert('Le fichier sélectionné dépasse la taille maximale de 4 Mo.');
+            // on vide le champs... sinon on cumule les fichiers uploadés et les messages d'erreur
+            document.getElementById("photo_file").value ='';
+
+        }
         
         // Vérifie si file n'est pas null ou undefined, c'est-à-dire si un fichier a effectivement été sélectionné
-        if (file) {
+        if (file && file.size < 4 * 1024 * 1024) {
             // Crée un nouvel objet FileReader pour lire le contenu du fichier.
             var reader = new FileReader();
             
@@ -453,7 +464,7 @@ function openModal2()
 
             };
     
-            // Lire le contenu du fichier comme une URL de données (Data URL)
+            // Conversion du fichier en format affichable... je pouvais utiliser aussi URL.createObjectURL(file) (autre methode de programmation/idéal pour les fichier plus volumineux comme des video par exemple)
             reader.readAsDataURL(file);
 
 
@@ -490,6 +501,8 @@ function openModal2()
 
 }
 
+
+
 // fonction pour switcher la couleur du bouton "valider"
 function changeBoutonColor()
 {
@@ -500,6 +513,7 @@ function changeBoutonColor()
         {
             document.querySelector("#butt_valider").style.backgroundColor = "#1D6154";
         }
+        
     else
         {
             document.querySelector("#butt_valider").style.backgroundColor = "#A7A7A7";
@@ -509,7 +523,7 @@ function changeBoutonColor()
 
 
 // fonction du bouton "fleche" pour revenir a la modale precedente
-function Prev () 
+function Previous () 
 {
     const modal1 = document.querySelector(".modal1-content");
     modal1.classList.remove('hidden');
@@ -519,11 +533,11 @@ function Prev ()
     // suppression de la photo preview s'il y en a eu une de chargée
     var previewElement = document.getElementById('preview');
     if (previewElement) 
-    {
-        previewElement.remove();
-        var imagePreviewDiv = document.getElementById('photo_preview');
-        imagePreviewDiv.classList.add('hidden');
-    }
+        {
+            previewElement.remove();
+            var imagePreviewDiv = document.getElementById('photo_preview');
+            imagePreviewDiv.classList.add('hidden');
+        }
 
     // Réinitialiser la valeur du champ de fichier pour permettre de re-sélectionner le même fichier
     document.getElementById("photo_file").value ='';
@@ -541,6 +555,7 @@ function Prev ()
 // fonction du bouton valider pour l'ajout d'un projet
 function ValiderAjout ()
 {
+    token = window.localStorage.getItem('TokenAuth');
     
     const select = document.getElementById("menu_deroulant");
 
@@ -549,30 +564,74 @@ function ValiderAjout ()
     const nom_categorie = select.options[select.selectedIndex].innerText;
     const image = document.getElementById("photo_file").files[0];
 
+    // je crée manuellement mon FormData car tous les champs de mon formulaire ne sont pas utilisé et certaines données viennent de l'exterieur comme le "calcul" de id_categorie
     const formData = new FormData();
     formData.append("image", image);
     formData.append("title", titre);
     formData.append("category", id_categorie);
 
-    fetch('http://localhost:5678/api/works', {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        body: formData,
-    })
-        .then((response) => {
-            if (response.ok) 
-            {
-                alert("Votre projet " +titre+ " a été créé avec succés");
-                console.log (response.json());
-            } 
-            else 
-            {
-                alert("Une erreur est survenue: "+response.status);
-            }
-        })
+    if (image == undefined)
+        {
+            alert("Veuillez ajouter une image");
+        }
+
+    if (titre.length == 0)
+        {    
+            alert("Veuillez ajouter un titre");
+        }
         
+    if (nom_categorie == "")
+        {
+            alert("Veuillez choisir une catégorie");
+        }
+      
+    else
+        {
+
+            fetch('http://localhost:5678/api/works', {
+                method: "POST",
+                headers: {
+                    accept: "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            })
+                .then((reponseAPI) => {
+                    if (reponseAPI.ok) 
+                    {
+                        alert("Votre projet " +titre+ " a été créé avec succés");
+
+                        return reponseAPI.json();
+                                        
+                    } 
+                    else 
+                    {
+                        alert("Une erreur est survenue: "+response.status);
+                    }
+                })
+
+                .then((data) => {
+                    
+                    const NewPoject = {}
+                    NewPoject.id = data.id;
+                    NewPoject.title = data.title;
+                    NewPoject.imageUrl = data.imageUrl;
+                    NewPoject.categoryId = 1;
+                    NewPoject.userId = id_categorie;
+                    NewPoject.category = {"id" : id_categorie, "name" : nom_categorie};
+                    
+                    works.push(NewPoject);
+
+                    const modal1 = document.querySelector(".modal1-content");
+                    modal1.classList.remove('hidden');
+                    const modal2 = document.querySelector(".modal2-content");
+                    modal2.classList.add('hidden');
+
+                    afficherWorks(works);
+                    afficherWorksModal(works);
+                    afficherCategorie(works);
+                })
+        }
 
    
     

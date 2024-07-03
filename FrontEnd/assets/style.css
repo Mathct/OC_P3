@@ -177,7 +177,7 @@ nav li {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+#contact input[type="submit"],#login input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -187,6 +187,7 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
+
 
 footer nav ul {
 	display: flex;
