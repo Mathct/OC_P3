@@ -573,16 +573,21 @@ function ValiderAjout ()
     if (image == undefined)
         {
             alert("Veuillez ajouter une image");
+            return
         }
 
     if (titre.length == 0)
         {    
             alert("Veuillez ajouter un titre");
+            return
+
         }
         
     if (nom_categorie == "")
         {
             alert("Veuillez choisir une catégorie");
+            return
+
         }
       
     else
