@@ -132,7 +132,6 @@ nav li {
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	/*grid-auto-rows: 485px;*/
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
 	margin-top: 50px;
