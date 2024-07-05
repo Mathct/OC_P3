@@ -54,11 +54,11 @@ function Logout ()
 //////////////////////////////////////////////////////////////////
 
 //recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
-const reponse = await fetch('http://localhost:5678/api/works');
-let works = await reponse.json();
+const reponseworks = await fetch('http://localhost:5678/api/works');
+let works = await reponseworks.json();
 //recuperation et stockage des données categories sur l'api pour le menu deroulant de la modale pour ajouter des projets
-const reponse2 = await fetch('http://localhost:5678/api/categories');
-const category = await reponse2.json();
+const reponsecategory = await fetch('http://localhost:5678/api/categories');
+const category = await reponsecategory.json();
 
 //////////////////////////////////////////////////////////////////
 /// fonction pour afficher la liste complete des works
@@ -356,27 +356,32 @@ function SupprimerWork (e)
         headers: {
           authorization: `Bearer ${token}`,
         },
-      }).then((reponseAPI) => {
+      })
+      
+      .then((reponseAPI) => {
         
-        if (reponseAPI.ok) 
-        {
-          alert("Le projet a été supprimé avec succés")
-          
-          // Je recrée mon works sans l'image supprimé (pour eviter de refaire un fetch)
-          works = works.filter((work) => work.id != suppId);
-          //je relance mes 3 fonctions d'affichage
-          afficherWorks(works);
-          afficherWorksModal(works);
-          afficherCategorie(works);
-          
-        } 
-        
-        else 
-        {
-          alert("Une erreur est survenue: "+response.status);
-        }
-      });
-    
+            if (reponseAPI.ok) 
+            {
+            alert("Le projet a été supprimé avec succés")
+            
+            // Je recrée mon works sans l'image supprimé (pour eviter de refaire un fetch)
+            works = works.filter((work) => work.id != suppId);
+            //je relance mes 3 fonctions d'affichage
+            afficherWorks(works);
+            afficherWorksModal(works);
+            afficherCategorie(works);
+            
+            } 
+            
+            else 
+            {
+            alert("Une erreur est survenue: "+response.status);
+            }
+      })
+
+      .catch(error => {
+        alert('Une erreur s\'est produite');
+    });
 }
 
 //////////////////////////////////////////////////////////////////
@@ -433,8 +438,7 @@ function openModal2()
 
         }
         
-        // Vérifie si file n'est pas null ou undefined, c'est-à-dire si un fichier a effectivement été sélectionné
-        if (file && file.size < 4 * 1024 * 1024) {
+        if (file && file.size < 4 * 1024 * 1024) { // 4 Mo en octets
             // Crée un nouvel objet FileReader pour lire le contenu du fichier.
             var reader = new FileReader();
             
@@ -451,7 +455,7 @@ function openModal2()
                 img.style.maxHeight = '100%';
                 
                 // Sélectionner la div où l'image doit être affichée
-                var imagePreviewDiv = document.getElementById('photo_preview');
+                let imagePreviewDiv = document.getElementById('photo_preview');
                 
                 // Vider le contenu de la div avant d'ajouter une nouvelle image
                 imagePreviewDiv.innerHTML = '';
@@ -461,6 +465,16 @@ function openModal2()
 
                 //enlever le hidden sur photo_preview
                 imagePreviewDiv.classList.remove('hidden');
+
+                /*
+                img.style.cursor = 'pointer';
+                // Ajouter un écouteur d'événement à l'image pour recharger une nouvelle image lorsqu'on clique dessus
+                img.addEventListener('click', function() {
+                // Simuler un clic sur l'input file
+                document.getElementById('photo_file').click();
+                });
+                */
+                
 
             };
     
@@ -483,7 +497,7 @@ function openModal2()
 
     });
 
-
+    
     // Sélectionner le formulaire
     const form = document.getElementById('form_add_projet');
     // Sélectionner tous les champs du formulaire (input de type texte, input de type file, select, textarea)
@@ -636,6 +650,12 @@ function ValiderAjout ()
                     afficherWorksModal(works);
                     afficherCategorie(works);
                 })
+
+                .catch(error => {
+                    alert('Une erreur s\'est produite');
+                })
+
+                
         }
 
    
