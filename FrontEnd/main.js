@@ -53,10 +53,9 @@ function Logout ()
 /// Recuperation des données de l'API
 //////////////////////////////////////////////////////////////////
 
-//recuperation et stockage des données works sur l'api .... je mets le works en let pour pouvoir le mettre à jour lors de la suppression de projet sans avoir à refaire un fetch
 const reponseworks = await fetch('http://localhost:5678/api/works');
 let works = await reponseworks.json();
-//recuperation et stockage des données categories sur l'api pour le menu deroulant de la modale pour ajouter des projets
+
 const reponsecategory = await fetch('http://localhost:5678/api/categories');
 const category = await reponsecategory.json();
 
@@ -66,9 +65,10 @@ const category = await reponsecategory.json();
 
 function afficherWorks(works){
 
-    // Récupération de l'élément du DOM qui accueillera les "works"
-    // on vide la gallery pour ne pas que les works se rajoutent automatiquement à l'ouverture et a la modification (suppression et ajout)
+  
+    
     const groupWork = document.querySelector(".gallery");
+    // on vide la gallery pour ne pas que les works se rajoutent automatiquement à l'ouverture et a la modification (suppression et ajout)
     groupWork.innerHTML = "";
 
 
@@ -76,25 +76,24 @@ function afficherWorks(works){
 
         const work = works[i];
         
-        // Création d’une balise dédiée aux "works"
+        
         const workElement = document.createElement("figure"); 
-        // Création des img (lien + alt) 
+        
         const imageWork = document.createElement("img");
         imageWork.src = work.imageUrl;
         imageWork.alt = work.title;
-        // Création des titres en "figcaption" afin de respecter le html
+        
         const titreWork = document.createElement("figcaption");
         titreWork.innerText = work.title;
 
-        // On rattache le workElement (figures) au groupWork (gallery)
+       
         groupWork.appendChild(workElement);
-        // On rattache les deux elements (img et title) au workElement (figures) 
         workElement.appendChild(imageWork);
         workElement.appendChild(titreWork);
     }
 }
 
-// et on execute la fonction
+
 afficherWorks(works);
 
 
@@ -123,7 +122,7 @@ function afficherCategorie(works)
     // Trouver les IDs associés aux noms pour le tri
     const idA = listcategory.find(item => item.name === nameA).id;
     const idB = listcategory.find(item => item.name === nameB).id;
-    // Comparaison pour le tri croissant
+    
     return idA - idB;
     });
 
@@ -138,11 +137,10 @@ function afficherCategorie(works)
     const group = document.getElementById("filtres");
     group.innerHTML = "";
 
-    // creation des boutons (le but est d'avoir le numero de l'id de la categorie dans les id des boutons respectifs afin de ne pas afficher les categories vides)
 
+    // creation des boutons (le but est d'avoir le numero de l'id de la categorie dans les id des boutons respectifs afin de ne pas afficher les categories vides)
     // Extraction des ids uniques des catégories 
     const uniqueIdSet = new Set(listcategory.map(item => item.id));
-    // transformation en array et Tri par ordre croissant des id
     const uniqueIdTri= Array.from(uniqueIdSet).sort((a, b) => a - b);
 
     if (uniqueIdTri.length != 0)
@@ -215,7 +213,7 @@ function afficherCategorie(works)
 
 }
 
-// et on execute la fonction
+
 afficherCategorie(works)
 
 
@@ -279,14 +277,13 @@ function CloseModal (e)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-/// fonction pour afficher la liste complete des works dans la modale ainsi que les boutons delete
+/// fonction pour afficher les projets dans la modale ainsi que les boutons de suppression
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 function afficherWorksModal(works)
 {
 
-    // Récupération de l'élément du DOM qui accueillera les "works"
-    // on vide la gallery pour ne pas que les works se rajoutent automatiquement à l'ouverture et a la modification (suppression et ajout)
+    
     const groupWorkModal = document.querySelector(".modal-gallery");
     groupWorkModal.innerHTML = "";
 
@@ -294,27 +291,27 @@ function afficherWorksModal(works)
 
         const work = works[i];
         
-        // Création d’une balise dédiée aux "works"
+        
         const workElementModal = document.createElement("figure"); 
-        // Création des img (lien + alt) 
+         
         const imageWorkModal = document.createElement("img");
         imageWorkModal.src = work.imageUrl;
         imageWorkModal.alt = work.title;
+
         //creation des boutons delete
         const poubelle = document.createElement("i");
         poubelle.id = "poubelle_"+work.id;
         poubelle.classList.add("fa-solid", "fa-trash-can");
 
         
-        // On rattache le workElement (figures) au groupWork (modal-gallery)
+        
         groupWorkModal.appendChild(workElementModal);
-        // On rattache imageWorkModal (img) au workElement (figures) 
         workElementModal.appendChild(imageWorkModal);
-        // on rattache la poubelle à workElement 
         workElementModal.appendChild(poubelle);
 
              
     }
+
 
     // ajout addEventListener à tous les boutons "poubelle"
     const poubellelistener = document.querySelectorAll(".fa-trash-can");
@@ -401,12 +398,11 @@ function openModal2()
     const prev = document.querySelector(".prev");
     prev.addEventListener('click', Previous)
 
-    // pour supprimer le titre si l'utilisation a taper un titre puis fermé la modale et qu'il revient sur la modale (le champ doit être de nouveau vide)
+    // pour supprimer le titre si l'utilisateur a taper un titre puis fermé la modale et qu'il revient sur la modale (le champ doit être de nouveau vide)
     const titre = document.getElementById("titre");
     titre.value  = "";
 
     // charger la liste des categories dans le menu déroulant //
-    //nettoyage menu
     document.querySelector("#menu_deroulant").innerHTML = "";
     // premiere option vide //
     let option = document.createElement("option");
@@ -428,7 +424,7 @@ function openModal2()
     // traitement de la selection d'image
     //listener sur l'id 'insererphoto' (input du champs file du formulaire) pour detecter un changement (qui signifie que l'utilisateur a selectionné une photo)
     document.getElementById('photo_file').addEventListener('change', function(event) {
-        // Récupérer le fichier sélectionné ... ici on recupere le premier (si jmamais il y en a plusieurs de selectionné)
+        
         var file = event.target.files[0];
 
         if (file && file.size > 4 * 1024 * 1024) { // 4 Mo en octets
@@ -444,37 +440,22 @@ function openModal2()
             
             // Définit une fonction à exécuter lorsque le fichier est complètement lu. L'événement load est déclenché lorsqu'une lecture réussie est terminée.
             reader.onload = function(e) {
-                // Créer une nouvelle balise img
+                
                 var img = document.createElement('img');
                 img.id = "preview";
                 
-                // Définir l'attribut src de la balise img à l'URL de l'image lue
                 img.src = e.target.result;
                 
                 // S'assurer que l'image s'ajuste à la div
                 img.style.maxHeight = '100%';
-                
-                // Sélectionner la div où l'image doit être affichée
                 let imagePreviewDiv = document.getElementById('photo_preview');
-                
-                // Vider le contenu de la div avant d'ajouter une nouvelle image
                 imagePreviewDiv.innerHTML = '';
-                
-                // Ajouter l'image à la div
                 imagePreviewDiv.appendChild(img);
 
                 //enlever le hidden sur photo_preview
                 imagePreviewDiv.classList.remove('hidden');
 
-                /*
-                img.style.cursor = 'pointer';
-                // Ajouter un écouteur d'événement à l'image pour recharger une nouvelle image lorsqu'on clique dessus
-                img.addEventListener('click', function() {
-                // Simuler un clic sur l'input file
-                document.getElementById('photo_file').click();
-                });
-                */
-                
+                               
 
             };
     

@@ -7,7 +7,7 @@
 const formulaire = document.querySelector(".info-login");
 const message = document.getElementById("message-error");
 
-// Gestion du submit de mon formalaire
+// Gestion du submit de mon formulaire
 formulaire.addEventListener("submit", async function (event) {
 
     event.preventDefault();
