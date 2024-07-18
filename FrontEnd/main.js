@@ -145,7 +145,7 @@ function afficherCategorie(works)
 
     if (uniqueIdTri.length != 0)
         {
-            uniqueIdTri.unshift("tous"); // on rajoute "tous" en premiere place (id du bouton "Tous").. je ne mets pas 0 si jamais un id 0 de categorie est créé
+            uniqueIdTri.unshift("tous"); // on rajoute l'id "tous" en premiere place .. je ne mets pas 0 si jamais un id 0 de categorie est créé
         }
 
     for (let i=0; i<listeNames.length; i++)
@@ -225,7 +225,7 @@ afficherCategorie(works)
 const modal = document.getElementById("modal");
 
 
-// ouverture modale1
+// ouverture premiere modale
 modifier.addEventListener ('click', function () {
 
     modal.classList.remove('hidden');
@@ -238,7 +238,7 @@ modifier.addEventListener ('click', function () {
         
 });
 
-//fermeture modale
+//fermeture de la modale active
 function CloseModal (e)
 {
 
