@@ -612,15 +612,15 @@ function ValiderAjout ()
 
                 .then((data) => {
                     
-                    const NewPoject = {}
-                    NewPoject.id = data.id;
-                    NewPoject.title = data.title;
-                    NewPoject.imageUrl = data.imageUrl;
-                    NewPoject.categoryId = 1;
-                    NewPoject.userId = id_categorie;
-                    NewPoject.category = {"id" : id_categorie, "name" : nom_categorie};
+                    const NewProject = {}
+                    NewProject.id = data.id;
+                    NewProject.title = data.title;
+                    NewProject.imageUrl = data.imageUrl;
+                    NewProject.categoryId = 1;
+                    NewProject.userId = id_categorie;
+                    NewProject.category = {"id" : id_categorie, "name" : nom_categorie};
                     
-                    works.push(NewPoject);
+                    works.push(NewProject);
 
                     const modal1 = document.querySelector(".modal1-content");
                     modal1.classList.remove('hidden');
